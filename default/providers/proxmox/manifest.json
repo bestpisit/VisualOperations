@@ -1,0 +1,94 @@
+{
+    "id": "proxmox",
+    "name": "Proxmox",
+    "description": "Provision and manage Proxmox resources",
+    "type": "proxmox-provider",
+    "terraform": {
+        "source": "telmate/proxmox",
+        "version": "2.9.11"
+    },
+    "inputs": [
+        {
+            "name": "pm_api_url",
+            "title": "Proxmox API URL",
+            "type": "string",
+            "default": "https://localhost/api2/json",
+            "required": true,
+            "description": "The Proxmox API URL"
+        },
+        {
+            "name": "pm_api_token_id",
+            "title": "Proxmox Username",
+            "type": "string",
+            "required": true,
+            "description": "The Proxmox API Token ID"
+        },
+        {
+            "name": "pm_api_token_secret",
+            "title": "Proxmox Password",
+            "type": "string",
+            "secret": true,
+            "required": true,
+            "description": "The Proxmox API Token Secret"
+        },
+        {
+            "name": "pm_tls_insecure",
+            "title": "Ignore TLS Certificate Validation",
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Whether to ignore TLS certificate validation"
+        },
+        {
+            "name": "pm_node",
+            "title": "Proxmox Node in Cluster",
+            "type": "string",
+            "configuration": true,
+            "required": true,
+            "description": "The Proxmox Node in the Cluster"
+        },
+        {
+            "name": "pm_cidr_range",
+            "title": "IP CIDR Range for VMs",
+            "type": "regex",
+            "configuration": true,
+            "required": true,
+            "description": "The valid CIDR range for VMs",
+            "validation": {
+                "regex": "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\/(?:[0-9]|[1-2][0-9]|3[0-2])$",
+                "error_message": "The CIDR range must be a valid format (e.g., 192.168.0.0/24). Ensure IPs are valid and the prefix is between 0 and 32."
+            }
+        },
+        {
+            "name": "pm_subnet_mask",
+            "title": "Proxmox Subnet Mask",
+            "type": "number",
+            "configuration": true,
+            "required": true,
+            "description": "The Subnet Mask for the VM"
+        },
+        {
+            "name": "pm_gateway_ip",
+            "title": "Proxmox Gateway IP",
+            "type": "string",
+            "configuration": true,
+            "required": true,
+            "description": "The Default Gateway for Subnet"
+        },
+        {
+            "name": "pm_cloud_templates",
+            "title": "Proxmox Cloud Templates",
+            "type": "list",
+            "configuration": true,
+            "required": true,
+            "description": "The OS for the VM"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "vmId",
+            "type": "string",
+            "description": "The ID of the created Proxmox VM"
+        }
+    ]
+}

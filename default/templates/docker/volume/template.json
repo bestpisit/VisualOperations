@@ -1,0 +1,45 @@
+{
+    "id": "docker-volume",
+    "name": "Docker Volume",
+    "type": "application",
+    "description": "Manage Docker Network",
+    "category": "docker",
+    "subcategory": "volume",
+    "providers": [
+        "docker"
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "volume_name"
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "volume_name": {
+                "from": "volume_name",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_docker",
+            "title": "Docker Host Provider",
+            "type": "providers",
+            "providerType": "docker-provider",
+            "required": true,
+            "description": "Select where to deploy the docker volume"
+        },
+        {
+            "name": "volume_name",
+            "title": "Network Name",
+            "type": "string",
+            "required": true,
+            "description": "Name of the volume"
+        }
+    ],
+    "imageKey": ["Docker"]
+}

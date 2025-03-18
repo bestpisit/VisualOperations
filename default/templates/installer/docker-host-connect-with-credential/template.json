@@ -1,0 +1,96 @@
+{
+    "id": "docker-host-connect-with-credential",
+    "name": "Docker Host Connect with Credential",
+    "type": "infrastructure-configuration",
+    "description": "Install Docker on your Virtual Machine with credential",
+    "category": "installer",
+    "subcategory": "docker-host-connect-with-credential",
+    "resources": [
+        {
+            "name": {
+                "from": "name"
+            },
+            "config": {
+                "endpoint": {
+                    "fromOutput": "endpoint"
+                }
+            },
+            "provider": {
+                "providerId": "docker",
+                "config": {
+                    "resource_docker-installer": {
+                        "from": "id"
+                    }
+                }
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "docker_installer_name": {
+                "from": "name",
+                "scope": "project"
+            },
+            "name": {
+                "from": "name",
+                "scope": "project"
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "id",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "client-cert-path",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "client-key-path",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "endpoint",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "name",
+            "title": "Docker Host Name",
+            "type": "string",
+            "required": true,
+            "dummy": true,
+            "default": "docker-host-YOURVMNAME",
+            "description": "The name description for your docker host"
+        },
+        {
+            "name": "server_ip",
+            "title": "Server IP",
+            "type": "string",
+            "required": true,
+            "description": "IP address of the host"
+        },
+        {
+            "name": "server_username",
+            "title": "Server Username",
+            "type": "string",
+            "required": true,
+            "description": "SSH username"
+        },
+        {
+            "name": "server_password",
+            "title": "Server Password",
+            "type": "string",
+            "required": true,
+            "secret": true,
+            "description": "SSH Password"
+        }
+    ],
+    "imageKey": ["Docker","Server"]
+}

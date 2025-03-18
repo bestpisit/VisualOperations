@@ -1,0 +1,6 @@
+{
+    "name": "Docker",
+    "description": "Templates for Docker tools and management.",
+    "category": "Docker",
+    "imageKey": ["Docker"]
+}  

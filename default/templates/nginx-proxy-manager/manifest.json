@@ -1,0 +1,6 @@
+{
+    "name": "Nginx Proxy Manager",
+    "description": "Templates for managing Nginx proxies and SSL certificates",
+    "category": "Nginx Proxy Manager",
+    "imageKey": ["Nginx"]
+}

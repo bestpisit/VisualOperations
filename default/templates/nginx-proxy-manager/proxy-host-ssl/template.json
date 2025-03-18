@@ -1,0 +1,124 @@
+{
+    "id": "nginx-proxy-manager-proxy-host-ssl",
+    "name": "Proxy Host SSL",
+    "description": "Configure a new proxy host ssl",
+    "imageKey": ["Nginx"],
+    "category": "nginx-proxy-manager",
+    "subcategory": "proxy-host-ssl",
+    "type": "application-configuration",
+    "providers": [
+        "nginxproxymanager"
+    ],
+    "outputs": [
+        {
+            "name": "endpoint",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_nginxproxymanager",
+            "title": "Nginx Provider",
+            "type": "providers",
+            "providerType": "nginx-proxy-manager-provider",
+            "required": true,
+            "description": "The Nginx Provider that this Proxy Host will be deployed to"
+        },
+        {
+            "name": "resource_ssl-certificate",
+            "title": "Select SSL Certificate",
+            "type": "resource",
+            "resourceTypes": [
+                "nginx-proxy-manager-ssl-certificate"
+            ],
+            "required": true,
+            "description": "Select SSL Certificate"
+        },
+        {
+            "name": "name",
+            "title": "Proxy Host Name",
+            "type": "string",
+            "required": true,
+            "dummy": true,
+            "description": "The name description for proxy host resource"
+        },
+        {
+            "name": "domain_name",
+            "title": "Domain Name",
+            "type": "string",
+            "required": true,
+            "description": "The domain name for the proxy"
+        },
+        {
+            "name": "forward_scheme",
+            "title": "Forward Scheme",
+            "type": "regex",
+            "validation": {
+                "regex": "^https?$",
+                "error_message": "Only 'http' or 'https' are allowed."
+            },
+            "required": true,
+            "description": "The scheme to forward to",
+            "default": "http"
+        },
+        {
+            "name": "forward_host",
+            "title": "Forward Host",
+            "type": "string",
+            "required": true,
+            "description": "The Host address to forward to"
+        },
+        {
+            "name": "forward_port",
+            "title": "Forward Port",
+            "type": "number",
+            "required": true,
+            "description": "The port to forward to",
+            "default": 80
+        },
+        {
+            "name": "certificate_id",
+            "title": "Certificate ID",
+            "type": "number",
+            "required": true,
+            "configuration": true,
+            "validation": {
+                "from": "resource_ssl-certificate",
+                "reference": "certificate_id",
+                "import": true
+            },
+            "description": "The certificate ID"
+        }
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "name"
+            },
+            "config": {
+                "endpoint": {
+                    "fromOutput": "endpoint"
+                }
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "name": {
+                "from": "name",
+                "scope": "project"
+            },
+            "proxy_host_domain": {
+                "from": "domain_name",
+                "scope": "resource",
+                "scopeFrom": "provider_nginxproxymanager"
+            },
+            "proxy_host_name": {
+                "from": "name",
+                "scope": "resource",
+                "scopeFrom": "provider_nginxproxymanager"
+            }
+        }
+    ]
+}

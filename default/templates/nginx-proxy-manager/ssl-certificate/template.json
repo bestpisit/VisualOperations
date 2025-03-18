@@ -1,0 +1,76 @@
+{
+    "id": "nginx-proxy-manager-ssl-certificate",
+    "name": "Lets Encrypt SSL Certificate",
+    "description": "A Let's Encrypt SSL Certificate for a Proxy Host",
+    "imageKey": ["Nginx"],
+    "category": "nginx-proxy-manager",
+    "subcategory": "ssl-certificate",
+    "type": "application-configuration",
+    "providers": [
+        "nginxproxymanager"
+    ],
+    "inputs": [
+        {
+            "name": "provider_nginxproxymanager",
+            "title": "Nginx Provider",
+            "type": "providers",
+            "providerType": "nginx-proxy-manager-provider",
+            "required": true,
+            "description": "The Nginx Provider that this SSL Certificate will be deployed to"
+        },
+        {
+            "name": "name",
+            "title": "SSL Certificate Name",
+            "type": "string",
+            "required": true,
+            "dummy": true,
+            "description": "The name description for SSL Certificate resource"
+        },
+        {
+            "name": "domain_name",
+            "title": "Domain Name",
+            "type": "string",
+            "required": true,
+            "description": "The domain name for the proxy"
+        },
+        {
+            "name": "letsencrypt_email",
+            "title": "Let's Encrypt Email",
+            "type": "string",
+            "required": true,
+            "description": "The email address to use for Let's Encrypt"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "certificate_id",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "name"
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "name": {
+                "from": "name",
+                "scope": "project"
+            },
+            "ssl_certificate_name": {
+                "from": "name",
+                "scope": "resource",
+                "scopeFrom": "provider_nginxproxymanager"
+            },
+            "ssl_certificate_domain_name": {
+                "from": "domain_name",
+                "scope": "resource",
+                "scopeFrom": "provider_nginxproxymanager"
+            }
+        }
+    ]
+}

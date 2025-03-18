@@ -1,0 +1,43 @@
+{
+    "id": "nginxproxymanager",
+    "name": "Nginx Proxy Manager Host",
+    "description": "Provision and manage Nginx Environment",
+    "type": "nginx-proxy-manager-provider",
+    "terraform": {
+        "source": "Sander0542/nginxproxymanager",
+        "version": "0.1.6"
+    },
+    "inputs": [
+        {
+            "name": "url",
+            "title": "Nginx Proxy Manager API URL",
+            "type": "string",
+            "default": "http://localhost:81",
+            "required": true,
+            "description": "Nginx Proxy Manager API URL"
+        },
+        {
+            "name": "username",
+            "title": "Nginx Proxy Manager User Email",
+            "type": "string",
+            "default": "admin@example.com",
+            "required": true,
+            "description": "Nginx Proxy Manager User Email"
+        },
+        {
+            "name": "password",
+            "title": "Nginx Proxy Manager User Password",
+            "type": "string",
+            "required": true,
+            "secret": true,
+            "description": "Nginx Proxy Manager User Password"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "hostIp",
+            "type": "string",
+            "description": "The Ip of NPM Host"
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+{
+    "name": "Proxmox",
+    "description": "Templates for managing Proxmox Virtual Machines.",
+    "category": "Proxmox",
+    "imageKey": ["Proxmox"]
+}

@@ -1,0 +1,52 @@
+{
+    "id": "docker-network",
+    "name": "Docker Network",
+    "type": "application",
+    "description": "Manage Docker Network",
+    "category": "docker",
+    "subcategory": "network",
+    "providers": [
+        "docker"
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "network_name"
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "network_name": {
+                "from": "network_name",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_docker",
+            "title": "Docker Host Provider",
+            "type": "providers",
+            "providerType": "docker-provider",
+            "required": true,
+            "description": "Select where to deploy the docker network"
+        },
+        {
+            "name": "network_name",
+            "title": "Network Name",
+            "type": "string",
+            "required": true,
+            "description": "Name of the network"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "docker_network_name",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "imageKey": ["Docker"]
+}

@@ -1,0 +1,278 @@
+{
+    "id": "nutanix-virtual-machines",
+    "name": "Nutanix Virtual Machines",
+    "type": "infrastructure",
+    "description": "Manage Nutanix Virtual Machines",
+    "category": "nutanix",
+    "subcategory": "virtual-machine",
+    "providers": [
+        "nutanix"
+    ],
+    "tags": [
+        "virtual-machine"
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "vm_name"
+            },
+            "config": {
+                "status": {
+                    "fromOutput": "vm_status"
+                },
+                "cpu": {
+                    "fromOutput": "cpu"
+                },
+                "memory": {
+                    "fromOutput": "memory"
+                },
+                "storage": {
+                    "fromOutput": "storage"
+                },
+                "endpoint": {
+                    "fromOutput": "vm_ip"
+                },
+                "vm_gateway": {
+                    "fromOutput": "vm_gateway"
+                },
+                "vm_cidr": {
+                    "fromOutput": "vm_cidr"
+                },
+                "vm_username": {
+                    "fromOutput": "vm_username"
+                }
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "name": {
+                "from": "vm_name",
+                "scope": "global"
+            },
+            "ip": {
+                "from": "server_ip",
+                "scope": "global"
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "vm_id",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_name",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_status",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_ip",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_gateway",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_cidr",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_username",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_password",
+            "type": "string",
+            "sensitive": true
+        },
+        {
+            "name": "vm_public_key",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "vm_private_key",
+            "type": "string",
+            "sensitive": true
+        },
+        {
+            "name": "cpu",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "memory",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "storage",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_nutanix",
+            "title": "Nutanix Provider",
+            "type": "providers",
+            "providerType": "nutanix-provider",
+            "required": true,
+            "description": "Provider of the virtual machine"
+        },
+        {
+            "name": "vm_name",
+            "title": "Virtual Machine Name",
+            "type": "string",
+            "required": true,
+            "description": "Name of the virtual machine"
+        },
+        {
+            "name": "vm_image_name",
+            "title": "Operating System",
+            "type": "list",
+            "validation": {
+                "from": "provider_nutanix",
+                "reference": "vm_image_templates"
+            },
+            "required": true,
+            "description": "Template OS of the virtual machine"
+        },
+        {
+            "name": "server_username",
+            "title": "Root Username",
+            "type": "string",
+            "required": true,
+            "description": "Root Username of the virtual machine"
+        },
+        {
+            "name": "server_password",
+            "title": "Root Password",
+            "type": "string",
+            "required": true,
+            "secret": true,
+            "description": "Root Password of the virtual machine"
+        },
+        {
+            "name": "server_ip",
+            "title": "IP Address",
+            "type": "regex",
+            "validation": {
+                "from": "provider_nutanix",
+                "reference": "nutanix_cidr_range"
+            },
+            "required": true,
+            "description": "IP of the virtual machine"
+        },
+        {
+            "name": "server_cidr",
+            "title": "CIDR",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "provider_nutanix",
+                "reference": "server_cidr"
+            },
+            "required": true,
+            "description": "CIDR of the virtual machine"
+        },
+        {
+            "name": "server_gateway_ip",
+            "title": "Gateway IP",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "provider_nutanix",
+                "reference": "gateway_ip"
+            },
+            "required": true,
+            "description": "CIDR of the virtual machine"
+        },
+        {
+            "name": "nutanix_cluster_name",
+            "title": "Nutanix Cluster Name",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "provider_nutanix",
+                "reference": "nutanix_cluster_name"
+            },
+            "required": true,
+            "description": "Nutanix Cluster to deploy the VM"
+        },
+        {
+            "name": "nutanix_subnet_name",
+            "title": "Nutanix Subnet Name",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "provider_nutanix",
+                "reference": "nutanix_subnet_name"
+            },
+            "required": true,
+            "description": "Nutanix Subnet to deploy the VM"
+        },
+        {
+            "name": "cpu_cores",
+            "title": "vCPU Cores",
+            "type": "regex",
+            "validation": {
+                "regex": "^[1-2]$",
+                "error_message": "CPU cores must be either 1 or 2."
+            },
+            "required": true,
+            "description": "Number of vCPU",
+            "default": 2
+        },
+        {
+            "name": "memory",
+            "title": "Memory Size (MB)",
+            "type": "regex",
+            "validation": {
+                "regex": "^(2048|3072|4096)$",
+                "error_message": "Memory size must be 2048 MB (2GB), 3072 MB (3GB), or 4096 MB (4GB)."
+            },
+            "required": true,
+            "description": "Amount of memory in MB",
+            "default": 2048
+        },
+        {
+            "name": "disk_size",
+            "title": "Disk Size (GB)",
+            "type": "regex",
+            "default": 20,
+            "validation": {
+                "regex": "^(10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32)$",
+                "error_message": "Disk size must be between 10GB and 32GB."
+            },
+            "required": true,
+            "description": "VM Disk Size in GB"
+        }
+    ],
+    "resourceUsages": [
+        {
+            "cpu": {
+                "from": "cpu_cores"
+            },
+            "memory": {
+                "from": "memory"
+            },
+            "storage": {
+                "from": "disk_size"
+            }
+        }
+    ],
+    "imageKey": ["Nutanix", "Server"]
+}

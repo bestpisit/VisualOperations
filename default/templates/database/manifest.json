@@ -1,0 +1,6 @@
+{
+    "name": "Database",
+    "description": "Templates for Database tools and management.",
+    "category": "Database",
+    "imageKey": ["MySQL","PostgreSQL"]
+}  

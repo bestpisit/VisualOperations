@@ -1,0 +1,43 @@
+{
+    "id": "virtual-machine",
+    "name": "Virtual Machine",
+    "description": "Virtual Machine Connection",
+    "type": "virtualmachine-provider",
+    "inputs": [
+        {
+            "name": "server_ip",
+            "title": "Server IP",
+            "type": "regex",
+            "required": true,
+            "configuration": true,
+            "description": "The Server IP",
+            "validation": {
+                "regex": "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$",
+                "error_message": "Invalid IP Address format"
+            }
+        },
+        {
+            "name": "server_username",
+            "title": "Server Username",
+            "type": "string",
+            "required": true,
+            "configuration": true,
+            "description": "The Server Username"
+        },
+        {
+            "name": "server_password",
+            "title": "Server Password",
+            "type": "string",
+            "required": true,
+            "secret": true,
+            "description": "The Server Password"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "vmId",
+            "type": "string",
+            "description": "The ID of the created Proxmox VM"
+        }
+    ]
+}

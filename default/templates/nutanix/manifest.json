@@ -1,0 +1,6 @@
+{
+    "name": "Nutanix",
+    "description": "Templates for managing Nutanix infrastructure resources.",
+    "category": "Nutanix",
+    "imageKey": ["Nutanix"]
+}

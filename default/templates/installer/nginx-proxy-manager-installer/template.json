@@ -1,0 +1,110 @@
+{
+    "id": "nginx-proxy-manager-installer",
+    "name": "Nginx Proxy Manager Installer",
+    "type": "application",
+    "description": "Install Nginx Proxy Manager on your Docker Host",
+    "category": "installer",
+    "subcategory": "nginx-proxy-manager-installer",
+    "providers": [
+        "docker"
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "container_name"
+            },
+            "config": {
+                "endpoint": {
+                    "fromOutput": "endpoint"
+                }
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "container_name": {
+                "from": "container_name",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            },
+            "volume_name": {
+                "value": "nginx-proxy-manager-data",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            },
+            "container_host_port": {
+                "value": "80",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        },
+        {
+            "volume_name": {
+                "value": "nginx-proxy-manager-letsencrypt",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            },
+            "container_host_port": {
+                "value": "81",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        },
+        {
+            "container_host_port": {
+                "value": "443",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "endpoint",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_docker",
+            "title": "Proxmox Provider",
+            "type": "providers",
+            "providerType": "docker-provider",
+            "required": true,
+            "description": "Docker Host Provider"
+        },
+        {
+            "name": "resource_docker-network",
+            "title": "Which Docker Network (Optional)",
+            "type": "resource",
+            "resourceTypes": [
+                "docker-network"
+            ],
+            "required": false,
+            "description": "Select Docker Network (Optional)"
+        },
+        {
+            "name": "docker_network_name",
+            "title": "Docker Network Name",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "resource_docker-network",
+                "reference": "docker_network_name",
+                "import": true
+            },
+            "required": false,
+            "description": "Name of the Docker Network"
+        },
+        {
+            "name": "container_name",
+            "title": "Nginx Proxy Manager Name (Resource Name)",
+            "type": "string",
+            "required": true,
+            "default": "nginx-proxy-manager-YOURIDEA",
+            "description": "The name description for your docker host"
+        }
+    ],
+    "imageKey": ["Nginx"]
+}

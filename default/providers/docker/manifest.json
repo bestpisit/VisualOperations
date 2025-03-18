@@ -1,0 +1,66 @@
+{
+    "id": "docker",
+    "name": "Docker Host",
+    "description": "Provision and manage Docker Environment",
+    "type": "docker-provider",
+    "resourceProvider": true,
+    "terraform": {
+        "source": "kreuzwerker/docker",
+        "version": "3.0.2"
+    },
+    "inputs": [
+        {
+            "name": "resource_docker-installer",
+            "title": "Which Docker Host",
+            "type": "resource",
+            "resourceTypes": [
+                "installer-docker-vm-installer"
+            ],
+            "required": true,
+            "description": "Select Docker Host"
+        },
+        {
+            "name": "host",
+            "title": "Host Endpoint",
+            "type": "string",
+            "required": true,
+            "validation": {
+                "from": "resource_docker-installer",
+                "reference": "endpoint",
+                "import": true
+            },
+            "description": "End point of the host"
+        },
+        {
+            "name": "cert_material",
+            "title": "Certificate Material",
+            "type": "file",
+            "required": true,
+            "validation": {
+                "from": "resource_docker-installer",
+                "reference": "client-cert-path",
+                "import": true
+            },
+            "description": "Certificate Material"
+        },
+        {
+            "name": "key_material",
+            "title": "Key Material",
+            "type": "file",
+            "required": true,
+            "validation": {
+                "from": "resource_docker-installer",
+                "reference": "client-key-path",
+                "import": true
+            },
+            "description": "Key Material"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "hostIp",
+            "type": "string",
+            "description": "The Ip of Docker Host"
+        }
+    ]
+}

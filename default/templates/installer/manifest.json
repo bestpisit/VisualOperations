@@ -1,0 +1,6 @@
+{
+    "name": "Installer",
+    "description": "Templates for installing software on your hosts.",
+    "category": "Installer",
+    "imageKey": ["Terraform"]
+}

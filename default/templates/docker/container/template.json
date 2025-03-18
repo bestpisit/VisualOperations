@@ -1,0 +1,153 @@
+{
+    "id": "docker-container",
+    "name": "Docker Container",
+    "type": "application",
+    "description": "Manage Docker Container",
+    "category": "docker",
+    "subcategory": "container",
+    "providers": [
+        "docker"
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "container_name"
+            },
+            "config": {
+                "container_port": {
+                    "fromOutput": "container_port"
+                },
+                "host_port": {
+                    "fromOutput": "host_port"
+                },
+                "endpoint": {
+                    "fromOutput": "endpoint"
+                }
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "container_port",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "host_port",
+            "type": "string",
+            "sensitive": false
+        },
+        {
+            "name": "endpoint",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "container_name": {
+                "from": "container_name",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            },
+            "container_host_port": {
+                "from": "host_port",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_docker",
+            "title": "Docker Host Provider",
+            "type": "providers",
+            "providerType": "docker-provider",
+            "required": true,
+            "description": "Select where to deploy the container"
+        },
+        {
+            "name": "resource_docker-network",
+            "title": "Which Docker Network (Optional)",
+            "type": "resource",
+            "resourceTypes": [
+                "docker-network"
+            ],
+            "required": false,
+            "description": "Select Docker Network (Optional)"
+        },
+        {
+            "name": "docker_network_name",
+            "title": "Docker Network Name",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "resource_docker-network",
+                "reference": "docker_network_name",
+                "import": true
+            },
+            "required": false,
+            "description": "Name of the Docker Network"
+        },
+        {
+            "name": "name",
+            "title": "Resource Name (Docker Container)",
+            "type": "string",
+            "required": true,
+            "dummy": true,
+            "default": "docker-container-YOURCONTAINERNAME",
+            "description": "The name description for your docker container"
+        },
+        {
+            "name": "container_name",
+            "title": "Container Name",
+            "type": "string",
+            "required": true,
+            "description": "Name of the container"
+        },
+        {
+            "name": "docker_image_name",
+            "title": "Docker Image Name",
+            "type": "regex",
+            "validation": {
+                "regex": "^(?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)?[a-z0-9]+(?:[._-][a-z0-9]+)*:(?!latest$)[a-zA-Z0-9._-]+$",
+                "error_message": "Docker image name must follow the format: [optional-dockerhub-username/]repository:tag. The tag 'latest' is not allowed."
+            },
+            "required": true,
+            "description": "Docker image name with optional repository owner and non-latest tag (Docker Hub only)",
+            "default": "repository:1.0"
+        },
+        {
+            "name": "container_port",
+            "title": "Container Port",
+            "type": "number",
+            "required": true,
+            "description": "Port of the container",
+            "default": 80
+        },
+        {
+            "name": "host_port",
+            "title": "Publish Port",
+            "type": "number",
+            "required": true,
+            "description": "Port of the host to publish",
+            "default": 80
+        },
+        {
+            "name": "env_variables",
+            "title": "Environment Variables",
+            "type": "map",
+            "required": false,
+            "description": "Environment Variables"
+        },
+        {
+            "name": "restart_always",
+            "title": "Restart Always",
+            "type": "boolean",
+            "required": true,
+            "description": "Restart the container always",
+            "default": true
+        }
+    ],
+    "imageKey": ["Docker"]
+}

@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  visops:
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    volumes:
+      - ../../data:/app/data
+    image: visops-dev
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    environment:
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - visops-network
+
+  postgres:
+    image: postgres:15.3
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - visops-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Add volume for PostgreSQL
+
+  rabbitmq:
+    image: rabbitmq:4.0.6-management
+    restart: unless-stopped
+    volumes:
+        - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+        RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-admin}
+        RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-admin}
+    ports:
+        - 5672:5672    #amqp
+        - 15672:15672  #http
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 20s/
+      retries: 5
+    networks:
+      - visops-network
+
+networks:
+  visops-network:
+  elk:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+    driver: local

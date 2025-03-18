@@ -1,0 +1,123 @@
+{
+    "id": "mysql-database",
+    "name": "MySQL 5.7 Database",
+    "type": "application",
+    "description": "MySQL is an open-source relational database management system.",
+    "category": "database",
+    "subcategory": "mysql-database",
+    "providers": [
+        "docker"
+    ],
+    "resources": [
+        {
+            "name": {
+                "from": "container_name"
+            },
+            "config": {
+                "endpoint": {
+                    "fromOutput": "endpoint"
+                }
+            }
+        }
+    ],
+    "uniqueConstraints": [
+        {
+            "container_name": {
+                "from": "container_name",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            },
+            "volume_name": {
+                "value": "mysql_data",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            },
+            "container_host_port": {
+                "value": "3306",
+                "scope": "resource",
+                "scopeFrom": "provider_docker"
+            }
+        }
+    ],
+    "outputs": [
+        {
+            "name": "endpoint",
+            "type": "string",
+            "sensitive": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "provider_docker",
+            "title": "Proxmox Provider",
+            "type": "providers",
+            "providerType": "docker-provider",
+            "required": true,
+            "description": "Docker Host Provider"
+        },
+        {
+            "name": "resource_docker-network",
+            "title": "Which Docker Network (Optional)",
+            "type": "resource",
+            "resourceTypes": [
+                "docker-network"
+            ],
+            "required": false,
+            "description": "Select Docker Network (Optional)"
+        },
+        {
+            "name": "docker_network_name",
+            "title": "Docker Network Name",
+            "type": "string",
+            "configuration": true,
+            "validation": {
+                "from": "resource_docker-network",
+                "reference": "docker_network_name",
+                "import": true
+            },
+            "required": false,
+            "description": "Name of the Docker Network"
+        },
+        {
+            "name": "container_name",
+            "title": "Resource name (Container Name)",
+            "type": "string",
+            "required": true,
+            "default": "docker-mysql",
+            "description": "The name description for your docker host"
+        },
+        {
+            "name": "mysql_root_password",
+            "title": "MySQL Root Password",
+            "type": "string",
+            "required": true,
+            "description": "The root password for the MySQL database",
+            "secret": true
+        },
+        {
+            "name": "mysql_database",
+            "title": "MySQL Database",
+            "type": "string",
+            "default": "mydb",
+            "required": true,
+            "description": "The name of the database to create"
+        },
+        {
+            "name": "mysql_user",
+            "title": "MySQL User",
+            "type": "string",
+            "default": "myuser",
+            "required": true,
+            "description": "The name of the user to create"
+        },
+        {
+            "name": "mysql_password",
+            "title": "MySQL Password",
+            "type": "string",
+            "required": true,
+            "secret": true,
+            "description": "The password for the user"
+        }
+    ],
+    "imageKey": ["Docker", "MySQL"]
+}
