@@ -1,5 +1,3 @@
-# Interactive README
-
 ## Prerequisites
 Before running the project, ensure you have the following installed:
 
