@@ -1,0 +1,73 @@
+nameOverride: visops
+
+replicaCount: 1
+revisionHistoryLimit: 2
+
+image:
+  repository: bestengineer/visual-operations
+  tag: latest
+  pullPolicy: Always
+  size: 1Gi
+  accessModes: ReadWriteMany
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: kong
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+    - host: visops.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: visops-dev-tls-secret
+      hosts:
+        - visops.com
+
+config:
+  AUTH_TRUST_HOST: "true"
+  AUTH_URL: "https://visops.com"
+
+postgresql:
+  host: postgresql
+  auth:
+    username: postgres
+    password: postgres
+    database: visops
+
+rabbitmq:
+  enabled: true
+  image:
+    repository: rabbitmq
+    tag: 4.0.6-management-alpine
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  service:
+    type: ClusterIP
+    ports:
+      - name: amqp
+        targetPort: 5672
+      - name: management
+        targetPort: 15672
+
+  auth:
+    username: admin
+    password: admin
+
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessModes: ReadWriteOnce

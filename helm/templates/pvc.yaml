@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ include "visops.fullname" . | trim }}-pvc"
+  labels:
+    app: "{{ include "visops.fullname" . | trim }}"
+spec:
+  accessModes:
+    - {{ .Values.image.accessModes }}
+  resources:
+    requests:
+      storage: {{ .Values.image.size }}

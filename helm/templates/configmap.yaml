@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "visops.fullname" . | trim }}-config"
+  labels:
+    app: "{{ include "visops.fullname" . | trim }}"
+data:
+  AUTH_TRUST_HOST: "{{ .Values.config.AUTH_TRUST_HOST }}"
+  AUTH_URL: "{{ .Values.config.AUTH_URL }}"

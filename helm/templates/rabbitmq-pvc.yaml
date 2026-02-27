@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ include "visops.fullname" . | trim }}-rabbitmq-pvc"
+  labels:
+    app: "{{ include "visops.fullname" . | trim }}"
+spec:
+  accessModes:
+    - {{ .Values.rabbitmq.persistence.accessModes }}
+  resources:
+    requests:
+      storage: {{ .Values.rabbitmq.persistence.size }}
